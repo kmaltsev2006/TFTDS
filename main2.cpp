@@ -162,12 +162,12 @@ int main() {
     
     ObjPool<Printer> obj_pool {printers, _paper_in_each};
 
-    auto worker_job = [&obj_pool](uint64_t paper_to_print) {
+    auto worker_job = [&obj_pool](uint64_t papers_to_print) {
 #if defined(DBG)
-        std::osyncstream(std::cout) << std::format("{} | will try to print {}\n", thisThreadId(), paper_to_print);
+        std::osyncstream(std::cout) << std::format("{} | will try to print {}\n", thisThreadId(), papers_to_print);
 #endif
         auto printer = obj_pool.acquire();
-        while (paper_to_print--) {
+        while (papers_to_print--) {
             if (!printer->print_one()) { return; }
         }
     };
@@ -176,9 +176,9 @@ int main() {
     {
     std::vector<std::jthread> workers;
     for (int i=0; i<100; ++i) {
-        uint64_t paper_to_print = dist(rng);
-        workers.emplace_back(worker_job, paper_to_print);
-        paper_to_print_sm += paper_to_print;
+        uint64_t papers_to_print = dist(rng);
+        workers.emplace_back(worker_job, papers_to_print);
+        paper_to_print_sm += papers_to_print;
     }
     } // sync workers
 
