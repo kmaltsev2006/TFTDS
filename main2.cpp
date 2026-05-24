@@ -108,7 +108,6 @@ class ObjPool {
         auto obj_ptr = std::move(_objects.front());
         _objects.pop_front();
         return ObjPtrWrapper{std::move(obj_ptr), *this};
-        ;
     }
 
    private:
@@ -176,6 +175,6 @@ int main() {
 
     std::cout << std::format("obj_pool expected size {}\nobj_pool real size {}\n", obj_pool.size(),
                              obj_pool._objects.size());
-    
+
     assert(obj_pool.size() == obj_pool._objects.size());
 }
